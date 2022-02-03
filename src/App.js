@@ -1,25 +1,46 @@
-import logo from './logo.svg';
+import {useState} from "react";
 import './App.css';
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import MainContext from "./MainContext/MainContext";
+import Toolbar from "./Components/Toolbar";
+import CreateProductPage from "./Pages/CreateProductPage";
+import ShoppingCartPage from "./Pages/ShoppingCartPage";
+import SingleProductPage from "./Pages/SingleProductPage";
+import AllProductsPage from "./Pages/AllProductsPage";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const [getPage, setPage] = useState("")
+    const [getProduct, setProduct] = useState([])
+    const [getCart, setCart] = useState([])
+
+
+    return (
+        <div className="App">
+
+            <MainContext.Provider value={{
+                getProduct, setProduct,
+                getPage, setPage,
+                getCart, setCart
+            }}>
+                <BrowserRouter>
+                    <Toolbar page={getPage} />
+                    <Routes>
+                        <Route path="/" element={<CreateProductPage/>}/>
+                        <Route path="/products" element={<AllProductsPage/>}/>
+
+                        <Route path="/product/:title" element={<SingleProductPage/>}/>
+                        <Route path="/cart" element={<ShoppingCartPage/>}/>
+
+                    </Routes>
+                </BrowserRouter>
+
+            </MainContext.Provider>
+
+
+        </div>
+    );
 }
 
 export default App;
